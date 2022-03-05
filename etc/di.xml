@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="BuyBoxPaymentGatewayFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">BuyBox\Payment\Gateway\Config\Config::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">BuyBox\Payment\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">BuyBoxPaymentGatewayValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">BuyBoxPaymentGatewayCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader -->
+    <virtualType name="BuyBoxPaymentGatewayConfig" type="BuyBox\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">BuyBox\Payment\Gateway\Config\Config::CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Logger, initialized with BuyBoxPaymentGatewayConfig -->
+    <virtualType name="BuyBoxPaymentGatewayLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">BuyBoxPaymentGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="BuyBoxPaymentGatewayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="initialize" xsi:type="string">BuyBoxPaymentGatewayInitializeCommand</item>
+                <item name="capture" xsi:type="string">BuyBoxPaymentGatewayCaptureCommand</item>
+                <item name="void" xsi:type="string">BuyBoxPaymentGatewayVoidCommand</item>
+                <item name="cancel" xsi:type="string">BuyBoxPaymentGatewayVoidCommand</item>
+                <item name="refund" xsi:type="string">BuyBoxPaymentGatewayRefundCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Initialize command -->
+    <virtualType name="BuyBoxPaymentGatewayInitializeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BuyBoxPaymentGatewayInitializeRequest</argument>
+            <argument name="handler" xsi:type="object">BuyBox\Payment\Gateway\Response\InitializeHandler</argument>
+            <argument name="transferFactory" xsi:type="object">BuyBox\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">BuyBox\Payment\Gateway\Validator\ResponseValidator</argument>
+            <argument name="client" xsi:type="object">BuyBox\Payment\Gateway\Http\Client\Client</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Initialize Request -->
+    <virtualType name="BuyBoxPaymentGatewayInitializeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="url" xsi:type="string">BuyBox\Payment\Gateway\Request\UrlBuilder</item>
+                <item name="order" xsi:type="string">BuyBox\Payment\Gateway\Request\OrderBuilder</item>
+                <item name="authorization" xsi:type="string">BuyBox\Payment\Gateway\Request\InitializeBuilder</item>
+                <item name="authentication" xsi:type="string">BuyBox\Payment\Gateway\Request\AuthenticationBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Capture command -->
+    <virtualType name="BuyBoxPaymentGatewayCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BuyBoxPaymentGatewayCaptureRequest</argument>
+            <argument name="handler" xsi:type="object">BuyBox\Payment\Gateway\Response\CaptureHandler</argument>
+            <argument name="transferFactory" xsi:type="object">BuyBox\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">BuyBox\Payment\Gateway\Http\Client\Client</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Capture Request -->
+    <virtualType name="BuyBoxPaymentGatewayCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="url" xsi:type="string">BuyBox\Payment\Gateway\Request\CaptureBuilder</item>
+                <item name="order" xsi:type="string">BuyBox\Payment\Gateway\Request\OrderBuilder</item>
+                <item name="authentication" xsi:type="string">BuyBox\Payment\Gateway\Request\AuthenticationBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Void command -->
+    <virtualType name="BuyBoxPaymentGatewayVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BuyBoxPaymentGatewayVoidRequest</argument>
+            <argument name="handler" xsi:type="object">BuyBox\Payment\Gateway\Response\VoidHandler</argument>
+            <argument name="transferFactory" xsi:type="object">BuyBox\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">BuyBox\Payment\Gateway\Http\Client\Client</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Void Request -->
+    <virtualType name="BuyBoxPaymentGatewayVoidRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="void" xsi:type="string">BuyBox\Payment\Gateway\Request\VoidBuilder</item>
+                <item name="order" xsi:type="string">BuyBox\Payment\Gateway\Request\OrderBuilder</item>
+                <item name="authentication" xsi:type="string">BuyBox\Payment\Gateway\Request\AuthenticationBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Refund command -->
+    <virtualType name="BuyBoxPaymentGatewayRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BuyBoxPaymentGatewayRefundRequest</argument>
+            <argument name="handler" xsi:type="object">BuyBox\Payment\Gateway\Response\RefundHandler</argument>
+            <argument name="transferFactory" xsi:type="object">BuyBox\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">BuyBox\Payment\Gateway\Http\Client\Client</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Refund Request -->
+    <virtualType name="BuyBoxPaymentGatewayRefundRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="refund" xsi:type="string">BuyBox\Payment\Gateway\Request\RefundBuilder</item>
+                <item name="authentication" xsi:type="string">BuyBox\Payment\Gateway\Request\AuthenticationBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Value handlers infrastructure -->
+    <virtualType name="BuyBoxPaymentGatewayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">BuyBoxPaymentGatewayConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BuyBoxPaymentGatewayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">BuyBoxPaymentGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+</config>
