@@ -11,9 +11,9 @@ Shipping method.
 
 **Which version should I use ?**
 
-| Magento Version                                              | BuyBox Payment Version  | Install                                                      |
-|--------------------------------------------------------------|-------------------------|--------------------------------------------------------------|
-| Magento **2.0.x** Opensource (CE) && Enterprise Edition (EE) | BuyBoxPayment **2.0.x** | ```composer require buybox/module-payment-magento2 ~2.0.0``` |
+| Magento Version                                              | BuyBox Payment Version   | Install                                                        |
+|--------------------------------------------------------------|--------------------------|----------------------------------------------------------------|
+| Magento **2.0.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.0.x** | ```composer require buybox/giftcard-payment-magento2 ~2.0.0``` |
 
 ### Installing
 
@@ -21,7 +21,7 @@ Shipping method.
 The easiest way to install the extension is to use Composer:
 
 ```bash
-$ composer require buybox/buybox-payment-magento2
+$ composer require buybox/giftcard-payment-magento2
 $ bin/magento module:enable BuyBox_Payment
 $ bin/magento setup:upgrade
 $ bin/magento setup:di:compile
