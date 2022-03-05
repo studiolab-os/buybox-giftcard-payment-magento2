@@ -1,0 +1,30 @@
+Configure,Configure
+Close,Close
+"Cannot get order information from session","Cannot get order information from session"
+"Order Canceled By customer.","Order Canceled By customer."
+"Cannot get payment information from session","Cannot get payment information from session"
+"Error getting token information from session","Error getting token information from session"
+"Successfully created Payment Token. customer is Redirected to the payment interface","Successfully created Payment Token. customer is Redirected to the payment interface"
+"Cannot get payment information from order %s","Cannot get payment information from order %s"
+"Customer is back from BuyBox payment page.","Customer is back from BuyBox payment page."
+"Can't get response from API...","Can't get response from API..."
+Sandbox,Sandbox
+Production,Production
+Authorization,Authorization
+Sale,Sale
+"Payment action is not supported. Please contact client service","Payment action is not supported. Please contact client service"
+"Can't connect to payment API! please try again...","Can't connect to payment API! please try again..."
+"The %1 amount is %2.","The %1 amount is %2."
+"Place Order","Place Order"
+"General Configuration","General Configuration"
+active,active
+Title,Title
+"Sort Order","Sort Order"
+Environment,Environment
+"Payment Action","Payment Action"
+Debug,Debug
+"API Configuration","API Configuration"
+"Service Domain","Service Domain"
+"API Username","API Username"
+"API Password","API Password"
+"API Signature","API Signature"
