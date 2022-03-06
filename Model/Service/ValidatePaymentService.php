@@ -28,6 +28,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 
 class ValidatePaymentService
@@ -91,7 +92,7 @@ class ValidatePaymentService
     {
         try {
 
-            if ($transactionType == TransactionInterface::TYPE_CAPTURE) {
+            if ($transactionType == Transaction::TYPE_CAPTURE) {
                 $order->setState(Order::STATE_PROCESSING);
                 $order->setStatus(Order::STATE_PROCESSING);
             } else {
@@ -111,9 +112,9 @@ class ValidatePaymentService
                 'buybox_data',
                 $paymentData
             )->setIsTransactionClosed(
-                ($transactionType == TransactionInterface::TYPE_CAPTURE)
+                ($transactionType == Transaction::TYPE_CAPTURE)
             )->setIsTransactionPending(
-                !($transactionType == TransactionInterface::TYPE_CAPTURE)
+                !($transactionType == Transaction::TYPE_CAPTURE)
             )->setParentTransactionId(
                 null
             );
@@ -127,7 +128,7 @@ class ValidatePaymentService
 
             $message = __(
                 'The %1 amount is %2.',
-                $transactionType == TransactionInterface::TYPE_CAPTURE ? 'captured' : 'authorized',
+                $transactionType == Transaction::TYPE_CAPTURE ? 'captured' : 'authorized',
                 $formattedPrice
             );
 
