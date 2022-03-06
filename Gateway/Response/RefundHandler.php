@@ -19,13 +19,12 @@ declare(strict_types=1);
 namespace BuyBox\Payment\Gateway\Response;
 
 use BuyBox\Payment\Model\RestClient;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface as TransactionBuilderInterface;
 
 class RefundHandler implements HandlerInterface
@@ -61,7 +60,8 @@ class RefundHandler implements HandlerInterface
         OrderPaymentRepositoryInterface $paymentRepository,
         TransactionBuilderInterface $transactionBuilder,
         TransactionRepositoryInterface $transactionRepository
-    ) {
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->paymentRepository = $paymentRepository;
         $this->transactionBuilder = $transactionBuilder;
@@ -86,7 +86,7 @@ class RefundHandler implements HandlerInterface
             ->setTransactionId($response[RestClient::KEY_REFUND_TRANSACTION_ID])
             ->setAdditionalInformation(['buybox_data' => $response])
             ->setFailSafe(true)
-            ->build(TransactionInterface::TYPE_REFUND);
+            ->build(Transaction::TYPE_REFUND);
 
         $this->transactionRepository->save($transaction);
     }
