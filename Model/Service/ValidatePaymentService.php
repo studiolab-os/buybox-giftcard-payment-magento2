@@ -28,7 +28,6 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 
 class ValidatePaymentService
@@ -71,7 +70,8 @@ class ValidatePaymentService
         TransactionRepositoryInterface $transactionRepository,
         BuilderInterface $transactionBuilder,
         OrderManagementInterface $orderManagement
-    ) {
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->paymentRepository = $paymentRepository;
         $this->transactionRepository = $transactionRepository;
@@ -92,7 +92,7 @@ class ValidatePaymentService
     {
         try {
 
-            if ($transactionType == Transaction::TYPE_CAPTURE) {
+            if ($transactionType == TransactionInterface::TYPE_CAPTURE) {
                 $order->setState(Order::STATE_PROCESSING);
                 $order->setStatus(Order::STATE_PROCESSING);
             } else {
@@ -102,19 +102,20 @@ class ValidatePaymentService
 
             $this->orderRepository->save($order);
 
+
             // get payment object from order object
             $payment = $order->getPayment();
+
             $payment->setLastTransId(
                 $paymentData[RestClient::KEY_TRANSACTION_ID]
             )->setTransactionId(
                 $paymentData[RestClient::KEY_TRANSACTION_ID]
             )->setAdditionalInformation(
-                'buybox_data',
-                $paymentData
+                array_merge(['buybox_data' => $paymentData], $payment->getAdditionalInformation())
             )->setIsTransactionClosed(
-                ($transactionType == Transaction::TYPE_CAPTURE)
+                ($transactionType == TransactionInterface::TYPE_CAPTURE)
             )->setIsTransactionPending(
-                !($transactionType == Transaction::TYPE_CAPTURE)
+                !($transactionType == TransactionInterface::TYPE_CAPTURE)
             )->setParentTransactionId(
                 null
             );
@@ -128,13 +129,12 @@ class ValidatePaymentService
 
             $message = __(
                 'The %1 amount is %2.',
-                $transactionType == Transaction::TYPE_CAPTURE ? 'captured' : 'authorized',
+                $transactionType == TransactionInterface::TYPE_CAPTURE ? 'captured' : 'authorized',
                 $formattedPrice
             );
 
             $payment->addTransactionCommentsToOrder($transaction, $message);
 
-            $payment->setAdditionalInformation('buybox_data', $paymentData);
             $this->paymentRepository->save($payment);
 
             $order->setCanSendNewEmailFlag(true);
