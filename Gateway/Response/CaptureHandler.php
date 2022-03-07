@@ -37,7 +37,7 @@ class CaptureHandler implements HandlerInterface
         $payment->setAmountPaid($order->getGrandTotalAmount());
         $payment->setParentTransactionId($payment->getLastTransId());
         $payment->setLastTransId($response[RestClient::KEY_TRANSACTION_ID]);
-        $payment->setAdditionalInformation('buybox_data', $response);
+        $payment->setAdditionalInformation(['buybox_data' => $response]);
         $payment->setIsTransactionClosed(true);
     }
 }

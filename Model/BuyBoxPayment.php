@@ -66,7 +66,8 @@ class BuyBoxPayment
         CreateInvoiceService $createInvoiceService,
         RestClient $restClient,
         Config $config
-    ) {
+    )
+    {
         $this->validatePaymentService = $validatePaymentService;
         $this->createInvoiceService = $createInvoiceService;
         $this->restClient = $restClient;
