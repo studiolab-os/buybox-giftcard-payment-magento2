@@ -1,9 +1,6 @@
 # BuyBox Payment Module
 
-## Synopsis
-
-An extension to add integration with Payment Gateway. This payment method can be restricted to work only with specific
-Shipping method.
+BuyBox Gift Card payment gateway integration module for Magento 2.
 
 ## Technical feature
 
