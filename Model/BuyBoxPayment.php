@@ -25,7 +25,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment\Transaction;
 use Zend_Http_Client;
 
 class BuyBoxPayment
@@ -67,7 +66,8 @@ class BuyBoxPayment
         CreateInvoiceService $createInvoiceService,
         RestClient $restClient,
         Config $config
-    ) {
+    )
+    {
         $this->validatePaymentService = $validatePaymentService;
         $this->createInvoiceService = $createInvoiceService;
         $this->restClient = $restClient;
@@ -90,14 +90,14 @@ class BuyBoxPayment
             $this->validatePaymentService->execute(
                 $order,
                 $result,
-                Transaction::TYPE_CAPTURE
+                TransactionInterface::TYPE_CAPTURE
             );
             $this->createInvoiceService->execute($order);
         } elseif ($this->config->getPaymentAction() == Config::PAYMENT_ACTION_AUTHORIZE) {
             $this->validatePaymentService->execute(
                 $order,
                 $result,
-                Transaction::TYPE_AUTH
+                TransactionInterface::TYPE_AUTH
             );
         } else {
             throw new LocalizedException(__('Payment action is not supported. Please contact client service'));
