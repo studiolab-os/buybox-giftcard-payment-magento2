@@ -39,7 +39,8 @@ class VoidHandler implements HandlerInterface
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository
-    ) {
+    )
+    {
         $this->transactionRepository = $transactionRepository;
     }
 

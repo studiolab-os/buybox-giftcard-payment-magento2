@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace BuyBox\Payment\Gateway\Response;
 
 use BuyBox\Payment\Model\RestClient;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
@@ -61,7 +60,8 @@ class RefundHandler implements HandlerInterface
         OrderPaymentRepositoryInterface $paymentRepository,
         TransactionBuilderInterface $transactionBuilder,
         TransactionRepositoryInterface $transactionRepository
-    ) {
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->paymentRepository = $paymentRepository;
         $this->transactionBuilder = $transactionBuilder;

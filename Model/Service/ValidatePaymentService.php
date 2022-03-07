@@ -70,7 +70,8 @@ class ValidatePaymentService
         TransactionRepositoryInterface $transactionRepository,
         BuilderInterface $transactionBuilder,
         OrderManagementInterface $orderManagement
-    ) {
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->paymentRepository = $paymentRepository;
         $this->transactionRepository = $transactionRepository;
@@ -101,15 +102,16 @@ class ValidatePaymentService
 
             $this->orderRepository->save($order);
 
+
             // get payment object from order object
             $payment = $order->getPayment();
+
             $payment->setLastTransId(
                 $paymentData[RestClient::KEY_TRANSACTION_ID]
             )->setTransactionId(
                 $paymentData[RestClient::KEY_TRANSACTION_ID]
             )->setAdditionalInformation(
-                'buybox_data',
-                $paymentData
+                array_merge(['buybox_data' => $paymentData], $payment->getAdditionalInformation())
             )->setIsTransactionClosed(
                 ($transactionType == TransactionInterface::TYPE_CAPTURE)
             )->setIsTransactionPending(
@@ -133,7 +135,6 @@ class ValidatePaymentService
 
             $payment->addTransactionCommentsToOrder($transaction, $message);
 
-            $payment->setAdditionalInformation('buybox_data', $paymentData);
             $this->paymentRepository->save($payment);
 
             $order->setCanSendNewEmailFlag(true);
