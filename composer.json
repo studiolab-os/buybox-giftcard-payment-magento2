@@ -2,7 +2,7 @@
   "name": "buybox/giftcard-payment-magento2",
   "description": "BuyBox GiftCard integration with Magento 2",
   "type": "magento2-module",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "require": {
     "magento/module-sales": ">=101.0.0",
     "magento/module-checkout": ">=100.2.0",
