@@ -23,6 +23,7 @@ use BuyBox\Payment\Model\Service\CreateInvoiceService;
 use BuyBox\Payment\Model\Service\ValidatePaymentService;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Zend_Http_Client;
