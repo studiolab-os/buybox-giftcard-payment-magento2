@@ -19,5 +19,7 @@
     "psr-4": {
       "BuyBox\\Payment\\": ""
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
