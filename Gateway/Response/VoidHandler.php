@@ -20,7 +20,6 @@ namespace BuyBox\Payment\Gateway\Response;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
@@ -73,16 +72,14 @@ class VoidHandler implements HandlerInterface
      * Get transaction type auth.
      *
      * @param InfoInterface $payment
-     * @param OrderAdapterInterface $order
      * @return false|TransactionInterface
      * @throws InputException
      */
-    protected function getTransactionTypeAuth(InfoInterface $payment, OrderAdapterInterface $order)
+    protected function getTransactionTypeAuth(InfoInterface $payment)
     {
         return $this->transactionRepository->getByTransactionType(
             TransactionInterface::TYPE_AUTH,
-            $payment->getId(),
-            $order->getId()
+            $payment->getId()
         );
     }
 }
