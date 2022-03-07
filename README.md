@@ -15,6 +15,7 @@ Shipping method.
 |--------------------------------------------------------------|--------------------------|----------------------------------------------------------------|
 | Magento **2.0.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.0.x** | ```composer require buybox/giftcard-payment-magento2 ~2.0.0``` |
 | Magento **2.1.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.1.x** | ```composer require buybox/giftcard-payment-magento2 ~2.1.0``` |
+| Magento **2.2.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.2.x** | ```composer require buybox/giftcard-payment-magento2 ~2.2.0``` |
 
 ### Installing
 
