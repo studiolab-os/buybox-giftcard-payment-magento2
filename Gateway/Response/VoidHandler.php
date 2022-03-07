@@ -26,7 +26,6 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Sales\Model\Order\Payment\Transaction;
 
 class VoidHandler implements HandlerInterface
 {
@@ -81,7 +80,7 @@ class VoidHandler implements HandlerInterface
     protected function getTransactionTypeAuth(InfoInterface $payment, OrderAdapterInterface $order)
     {
         return $this->transactionRepository->getByTransactionType(
-            Transaction::TYPE_AUTH,
+            TransactionInterface::TYPE_AUTH,
             $payment->getId(),
             $order->getId()
         );
