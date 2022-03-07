@@ -52,7 +52,7 @@ class RefundBuilder implements BuilderInterface
         $amount = SubjectReader::readAmount($buildSubject);
         $payment = $paymentDo->getPayment();
         $order = $paymentDo->getOrder();
-        $buybox_data = $payment->getAdditionalInformation();
+        $buybox_data = $payment->getAdditionalInformation('buybox_data');
 
         return [
             RestClient::KEY_METHOD => Config::METHOD_REFUND_TRANSACTION,
