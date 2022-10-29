@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -20,26 +19,12 @@ namespace BuyBox\Payment\Gateway\Request;
 
 use BuyBox\Payment\Gateway\Config\Config;
 use BuyBox\Payment\Model\RestClient;
-use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class RefundBuilder implements BuilderInterface
 {
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @param Config $config
-     */
-    public function __construct(
-        Config $config
-    ) {
-        $this->config = $config;
-    }
-
     /**
      * Builds Refund request
      *
@@ -58,7 +43,19 @@ class RefundBuilder implements BuilderInterface
             RestClient::KEY_METHOD => Config::METHOD_REFUND_TRANSACTION,
             RestClient::KEY_TRANSACTION_ID => $buybox_data[RestClient::KEY_TRANSACTION_ID],
             RestClient::KEY_AMOUNT => $amount,
-            RestClient::KEY_REFUND_TYPE => ($amount == $order->getGrandTotalAmount()) ? 'Full' : 'Partial'
+            RestClient::KEY_REFUND_TYPE => $this->getRefundType($order, $amount)
         ];
+    }
+
+    /**
+     * Get refund type
+     *
+     * @param OrderAdapterInterface $order
+     * @param float $amount
+     * @return string
+     */
+    private function getRefundType(OrderAdapterInterface $order, float $amount): string
+    {
+        return $amount == $order->getGrandTotalAmount() ? Config::REFUND_TYPE_FULL : Config::REFUND_TYPE_PARTIAL;
     }
 }
