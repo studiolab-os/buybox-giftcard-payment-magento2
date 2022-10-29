@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -92,7 +91,7 @@ class RestClient
      * @param string $apiEndPoint
      * @param array $params
      * @param string $method
-     * @return array|null
+     * @return array
      * @throws LocalizedException
      */
     public function callApi(string $apiEndPoint, array $params, string $method = 'POST'): array

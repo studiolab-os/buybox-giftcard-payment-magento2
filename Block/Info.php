@@ -38,10 +38,10 @@ class Info extends ConfigurableInfo
      *
      * @param string $field
      * @param string $value
-     * @return string | Phrase
+     * @return Phrase
      */
-    protected function getValueView($field, $value)
+    protected function getValueView($field, $value): Phrase
     {
-        return parent::getValueView($field, $value);
+        return __(parent::getValueView($field, $value));
     }
 }

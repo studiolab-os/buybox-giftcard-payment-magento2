@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -54,7 +53,6 @@ class BuyBoxPayment
      */
     private $config;
 
-
     /**
      * @param ValidatePaymentService $validatePaymentService
      * @param CreateInvoiceService $createInvoiceService
@@ -66,8 +64,7 @@ class BuyBoxPayment
         CreateInvoiceService $createInvoiceService,
         RestClient $restClient,
         Config $config
-    )
-    {
+    ) {
         $this->validatePaymentService = $validatePaymentService;
         $this->createInvoiceService = $createInvoiceService;
         $this->restClient = $restClient;
@@ -82,7 +79,7 @@ class BuyBoxPayment
      * @return void
      * @throws LocalizedException
      */
-    public function process(Order $order, $params)
+    public function process(Order $order, $params): void
     {
         $result = $this->doExpressCheckout($order, $params);
 
@@ -105,29 +102,6 @@ class BuyBoxPayment
     }
 
     /**
-     * Do Authorization.
-     *
-     * @param OrderInterface $order
-     * @param $params
-     * @return array|null
-     * @throws LocalizedException
-     */
-    public function doAuthorization(OrderInterface $order, $params)
-    {
-        $params = array_merge([
-            RestClient::KEY_METHOD => Config::METHOD_DO_AUTHORISATION,
-            RestClient::KEY_PAYER_ID => $params['PayerID'],
-            RestClient::KEY_TOKEN => $params['token'],
-        ], $this->getDefaultParams($order), $this->config->getAuthenticationParams());
-
-        return $this->restClient->callApi(
-            $this->config->getApiEndpoint(),
-            $params,
-            Zend_Http_Client::POST
-        );
-    }
-
-    /**
      * Do Express Checkout.
      *
      * @param OrderInterface $order
@@ -135,7 +109,7 @@ class BuyBoxPayment
      * @return array|null
      * @throws LocalizedException
      */
-    public function doExpressCheckout(OrderInterface $order, $params)
+    public function doExpressCheckout(OrderInterface $order, $params): ?array
     {
         $params = array_merge([
             RestClient::KEY_METHOD => Config::METHOD_DO_EXPRESS_CHECKOUT_PAYMENT,
