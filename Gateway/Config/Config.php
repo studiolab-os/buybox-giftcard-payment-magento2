@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -36,6 +35,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const ENVIRONMENT_PRODUCTION = 'production';
 
     /**
+     * sub domain
+     */
+    const SUB_DOMAIN_SANDBOX = 'sandbox';
+    const SUB_DOMAIN_PRODUCTION = 'www2';
+
+    /**
      * Action List
      */
     const ACTION_REDIRECT = 'redirect';
@@ -56,7 +61,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_SERVICE_DOMAIN = 'service_domain';
     const KEY_ORDER_STATUS = 'order_status';
     const KEY_PAYMENT_ACTION = 'payment_action';
+    const KEY_TOKEN = 'token';
+    const KEY_PAYER_ID = 'PayerID';
 
+    /**
+     * Payment Methods
+     */
     const METHOD_DO_VOID = 'DoVoid';
     const METHOD_DO_CAPTURE = 'DoCapture';
     const METHOD_DO_AUTHORISATION = 'DoAuthorization';
@@ -76,6 +86,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     ];
 
     /**
+     * Refund
+     */
+    public const REFUND_TYPE_FULL = 'Full';
+    public const REFUND_TYPE_PARTIAL = 'Partial';
+
+    /**
      * @var UrlInterface $url
      */
     private $url;
@@ -90,13 +106,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     private $methodCode;
 
-
     /**
      * Config constructor.
      *
      * @param UrlInterface $url
      * @param ScopeConfigInterface $scopeConfig
-     * @param string|null $methodCode
+     * @param string $methodCode
      * @param string $pathPattern
      */
     public function __construct(
@@ -274,7 +289,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         return sprintf(
             self::DEFAULT_NVP_URL,
-            $this->getEnvironment() == self::ENVIRONMENT_SANDBOX ? 'sandbox' : 'www2'
+            $this->getEnvironment() == self::ENVIRONMENT_SANDBOX
+                ? self::SUB_DOMAIN_SANDBOX
+                : self::SUB_DOMAIN_PRODUCTION
         );
     }
 
