@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -25,7 +24,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 class AuthenticationBuilder implements BuilderInterface
 {
     /**
-     * @var ConfigInterface
+     * @var Config
      */
     private $config;
 

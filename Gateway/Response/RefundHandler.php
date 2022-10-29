@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -60,8 +59,7 @@ class RefundHandler implements HandlerInterface
         OrderPaymentRepositoryInterface $paymentRepository,
         TransactionBuilderInterface $transactionBuilder,
         TransactionRepositoryInterface $transactionRepository
-    )
-    {
+    ) {
         $this->orderRepository = $orderRepository;
         $this->paymentRepository = $paymentRepository;
         $this->transactionBuilder = $transactionBuilder;
@@ -75,7 +73,7 @@ class RefundHandler implements HandlerInterface
      * @param array $response
      * @return void
      */
-    public function handle(array $handlingSubject, array $response)
+    public function handle(array $handlingSubject, array $response): void
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         $order = $this->orderRepository->get($paymentDO->getOrder()->getId());
