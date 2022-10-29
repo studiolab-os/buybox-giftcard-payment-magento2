@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -38,8 +37,7 @@ class VoidHandler implements HandlerInterface
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository
-    )
-    {
+    ) {
         $this->transactionRepository = $transactionRepository;
     }
 
@@ -51,13 +49,13 @@ class VoidHandler implements HandlerInterface
      * @return void
      * @throws LocalizedException
      */
-    public function handle(array $handlingSubject, array $response)
+    public function handle(array $handlingSubject, array $response): void
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
         $order = $paymentDO->getOrder();
 
-        $authorizationTransaction = $this->getTransactionTypeAuth($payment, $order);
+        $authorizationTransaction = $this->getTransactionTypeAuth($payment);
 
         $payment->setParentTransactionId($authorizationTransaction->getTxnId());
         $payment->setTransactionId($authorizationTransaction->getTxnId() . '-void');
@@ -72,10 +70,10 @@ class VoidHandler implements HandlerInterface
      * Get transaction type auth.
      *
      * @param InfoInterface $payment
-     * @return false|TransactionInterface
+     * @return ?TransactionInterface
      * @throws InputException
      */
-    protected function getTransactionTypeAuth(InfoInterface $payment)
+    protected function getTransactionTypeAuth(InfoInterface $payment): ?TransactionInterface
     {
         return $this->transactionRepository->getByTransactionType(
             TransactionInterface::TYPE_AUTH,

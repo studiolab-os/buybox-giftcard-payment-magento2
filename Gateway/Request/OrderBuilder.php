@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -24,7 +23,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class OrderBuilder implements BuilderInterface
 {
-   /**
+    /**
      * Builds Order request
      *
      * @param array $buildSubject
