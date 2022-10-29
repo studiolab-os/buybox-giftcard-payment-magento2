@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -50,7 +49,6 @@ class CreateInvoiceService
      */
     protected $transaction;
 
-
     /**
      * CreateInvoiceService constructor.
      *
@@ -79,23 +77,22 @@ class CreateInvoiceService
      * @throws LocalizedException
      * @throws Exception
      */
-    public function execute(Order $order)
+    public function execute(Order $order): void
     {
         if ($order->canInvoice()) {
             $invoice = $this->invoiceService->prepareInvoice($order);
-            $invoice->setTransactionId($order->getPayment()->getLastTransId())
-                ->setRequestedCaptureCase(Invoice::CAPTURE_OFFLINE);
+            $invoice->setTransactionId(
+                $order->getPayment()->getLastTransId()
+            )->setRequestedCaptureCase(Invoice::CAPTURE_OFFLINE);
+
             $invoice->getOrder()->setCustomerNoteNotify(true);
             $invoice->getOrder()->setIsInProcess(true);
             $invoice->register();
 
-            $transactionSave = ObjectManager::getInstance()->create(
-                Transaction::class
-            )->addObject(
-                $invoice
-            )->addObject(
-                $order
-            );
+            $transactionSave = ObjectManager::getInstance()
+                ->create(Transaction::class)
+                ->addObject($invoice)
+                ->addObject($order);
 
             $transactionSave->save();
             $this->invoiceSender->send($invoice);

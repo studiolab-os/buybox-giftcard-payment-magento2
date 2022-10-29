@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
