@@ -1,6 +1,6 @@
 <?php
 /**
- * BuyBox payment module for Magento
+ * BuyBox Gift Card payment module for Magento
  *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
