@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -12,6 +11,8 @@
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      https://www.buybox.net/
  */
+
+declare(strict_types=1);
 
 namespace BuyBox\Payment\Block\Adminhtml\System\Config\Fieldset;
 
@@ -27,7 +28,7 @@ class Payment extends Fieldset
      *
      * @return string
      */
-    protected function _getFrontendClass($element)
+    protected function _getFrontendClass($element): string
     {
         return parent::_getFrontendClass($element) . ' with-button';
     }
@@ -38,7 +39,7 @@ class Payment extends Fieldset
      * @param AbstractElement $element
      * @return string
      */
-    protected function _getHeaderTitleHtml($element)
+    protected function _getHeaderTitleHtml($element): string
     {
         $html = '<div class="config-heading" >';
         $htmlId = $element->getHtmlId();
@@ -76,7 +77,7 @@ class Payment extends Fieldset
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getHeaderCommentHtml($element)
+    protected function _getHeaderCommentHtml($element): string
     {
         return '';
     }
@@ -88,7 +89,7 @@ class Payment extends Fieldset
      * @return false
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _isCollapseState($element)
+    protected function _isCollapseState($element): bool
     {
         return false;
     }
@@ -100,7 +101,7 @@ class Payment extends Fieldset
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getExtraJs($element)
+    protected function _getExtraJs($element): string
     {
         $script = "require(['jquery', 'prototype'], function(jQuery){
             window.BuyBoxToggleSolution = function (id, url) {

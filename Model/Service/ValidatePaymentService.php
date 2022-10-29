@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -70,8 +69,7 @@ class ValidatePaymentService
         TransactionRepositoryInterface $transactionRepository,
         BuilderInterface $transactionBuilder,
         OrderManagementInterface $orderManagement
-    )
-    {
+    ) {
         $this->orderRepository = $orderRepository;
         $this->paymentRepository = $paymentRepository;
         $this->transactionRepository = $transactionRepository;
@@ -88,10 +86,9 @@ class ValidatePaymentService
      * @return void
      * @throws LocalizedException
      */
-    public function execute(Order $order, array $paymentData, string $transactionType)
+    public function execute(Order $order, array $paymentData, string $transactionType): void
     {
         try {
-
             if ($transactionType == TransactionInterface::TYPE_CAPTURE) {
                 $order->setState(Order::STATE_PROCESSING);
                 $order->setStatus(Order::STATE_PROCESSING);
@@ -101,7 +98,6 @@ class ValidatePaymentService
             }
 
             $this->orderRepository->save($order);
-
 
             // get payment object from order object
             $payment = $order->getPayment();
@@ -119,7 +115,6 @@ class ValidatePaymentService
             )->setParentTransactionId(
                 null
             );
-
 
             $transaction = $this->createTransaction($order, $paymentData, $transactionType);
 

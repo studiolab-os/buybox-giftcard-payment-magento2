@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -39,7 +38,6 @@ class Url
      * @var Config
      */
     private $config;
-
 
     /**
      * @param Resolver $localeResolver
