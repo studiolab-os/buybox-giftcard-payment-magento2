@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -18,9 +17,9 @@ declare(strict_types=1);
 
 namespace BuyBox\Payment\Gateway\Request;
 
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use BuyBox\Payment\Gateway\Config\Config;
 use BuyBox\Payment\Model\RestClient;
+use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class InitializeBuilder implements BuilderInterface
 {

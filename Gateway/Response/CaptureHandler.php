@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -12,6 +11,8 @@
  * @license   http://opensource.org/licenses/OSL-3.0
  * @link      https://www.buybox.net/
  */
+
+declare(strict_types=1);
 
 namespace BuyBox\Payment\Gateway\Response;
 
@@ -28,7 +29,7 @@ class CaptureHandler implements HandlerInterface
      * @param array $response
      * @return void
      */
-    public function handle(array $handlingSubject, array $response)
+    public function handle(array $handlingSubject, array $response): void
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         $order = $paymentDO->getOrder();

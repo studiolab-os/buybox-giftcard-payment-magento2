@@ -18,27 +18,12 @@ declare(strict_types=1);
 namespace BuyBox\Payment\Gateway\Request;
 
 use BuyBox\Payment\Model\RestClient;
-use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use BuyBox\Payment\Gateway\Config\Config;
 
 class VoidBuilder implements BuilderInterface
 {
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @param Config $config
-     */
-    public function __construct(
-        Config $config
-    ) {
-        $this->config = $config;
-    }
-
     /**
      * Builds Void request
      *

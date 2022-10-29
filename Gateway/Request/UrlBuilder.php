@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -20,13 +19,12 @@ namespace BuyBox\Payment\Gateway\Request;
 
 use BuyBox\Payment\Gateway\Config\Config;
 use BuyBox\Payment\Model\RestClient;
-use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class UrlBuilder implements BuilderInterface
 {
     /**
-     * @var ConfigInterface
+     * @var Config
      */
     private $config;
 
