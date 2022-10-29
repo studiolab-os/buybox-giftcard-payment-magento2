@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -22,25 +21,36 @@ use BuyBox\Payment\Gateway\Config\Config;
 use BuyBox\Payment\Model\BuyBoxPayment;
 use Exception;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\RedirectFactory as ResultRedirectFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
-class ReturnAction extends \Magento\Framework\App\Action\Action
+class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
 {
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
     /**
      * @var CheckoutSession
      */
     private $checkoutSession;
 
     /**
-     * @var QuoteRepository
+     * @var CartRepositoryInterface
      */
-    private $quoteRepository;
+    private $cartRepository;
 
     /**
      * @var OrderRepositoryInterface
@@ -53,9 +63,14 @@ class ReturnAction extends \Magento\Framework\App\Action\Action
     private $buyBoxPayment;
 
     /**
-     * @var RequestInterface
+     * @var MessageManagerInterface
      */
-    private $request;
+    private $messageManager;
+
+    /**
+     * @var ResultRedirectFactory
+     */
+    private $resultRedirectFactory;
 
     /**
      * @var Config
@@ -63,39 +78,43 @@ class ReturnAction extends \Magento\Framework\App\Action\Action
     private $config;
 
     /**
-     * Redirect constructor.
+     * ReturnAction constructor.
      *
-     * @param Context $context
+     * @param RequestInterface $request
      * @param CheckoutSession $checkoutSession
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $cartRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param BuyBoxPayment $buyBoxPayment
+     * @param MessageManagerInterface $messageManager
+     * @param ResultRedirectFactory $resultRedirectFactory
      * @param Config $config
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
         CheckoutSession $checkoutSession,
-        QuoteRepository $quoteRepository,
+        CartRepositoryInterface $cartRepository,
         OrderRepositoryInterface $orderRepository,
         BuyBoxPayment $buyBoxPayment,
+        MessageManagerInterface $messageManager,
+        ResultRedirectFactory $resultRedirectFactory,
         Config $config
     ) {
-        parent::__construct($context);
+        $this->request = $request;
         $this->checkoutSession = $checkoutSession;
-        $this->quoteRepository = $quoteRepository;
+        $this->cartRepository = $cartRepository;
         $this->orderRepository = $orderRepository;
         $this->buyBoxPayment = $buyBoxPayment;
+        $this->messageManager = $messageManager;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->config = $config;
-
-        $this->request = $context->getRequest();
     }
 
     /**
      * Execute.
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return ResultInterface
      */
-    public function execute(): \Magento\Framework\Controller\Result\Redirect
+    public function execute(): ResultInterface
     {
         $redirect = $this->resultRedirectFactory->create();
         $params = $this->request->getParams();
@@ -113,31 +132,15 @@ class ReturnAction extends \Magento\Framework\App\Action\Action
                 );
             }
 
-            if (
-                null == $payment->getAdditionalInformation('token')
-                || !$params['token'] || !$params['PayerID']
-                || $payment->getAdditionalInformation('token') != $params['token']
-            ) {
+            if (!$this->validateParams($payment, $params)) {
                 $this->restoreQuote($order);
                 throw new LocalizedException(__('Error getting token information from session'));
             }
 
-            $comment = __('Customer is back from BuyBox payment page.');
-
-            if (
-                method_exists($order, 'addCommentToStatusHistory')
-                && is_callable([$order, 'addCommentToStatusHistory'])
-            ) {
-                $order->addCommentToStatusHistory(
-                    $comment,
-                    Order::STATE_PENDING_PAYMENT
-                );
-            } else {
-                $order->addStatusHistoryComment(
-                    $comment,
-                    Order::STATE_PENDING_PAYMENT
-                );
-            }
+            $order->addCommentToStatusHistory(
+                __('Customer is back from BuyBox payment page.'),
+                Order::STATE_PENDING_PAYMENT
+            );
 
             $order->setCanSendNewEmailFlag(true);
 
@@ -153,15 +156,44 @@ class ReturnAction extends \Magento\Framework\App\Action\Action
         return $redirect->setPath('checkout/cart');
     }
 
+    /**
+     * Validate params.
+     *
+     * @param OrderPaymentInterface $payment
+     * @param array $params
+     * @return bool
+     */
+    private function validateParams(OrderPaymentInterface $payment, array $params): bool
+    {
+        if (
+            !$payment->getAdditionalInformation(Config::KEY_TOKEN) || !isset($params[Config::KEY_TOKEN])
+            || !isset($params[Config::KEY_PAYER_ID]) || !$params[Config::KEY_PAYER_ID]
+            || $payment->getAdditionalInformation(Config::KEY_TOKEN) != $params[Config::KEY_TOKEN]
+        ) {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
+     * Restore quote.
+     *
+     * @param OrderInterface $order
+     * @return void
      * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
-    private function restoreQuote($order)
+    private function restoreQuote(OrderInterface $order): void
     {
-        $quote = $this->quoteRepository->get($order->getQuoteId());
+        try {
+            $quote = $this->cartRepository->get($order->getQuoteId());
+        } catch (NoSuchEntityException $e) {
+            throw new LocalizedException(__('Cannot get order information from session'));
+        }
+
         $quote->setIsActive(true);
-        $this->quoteRepository->save($quote);
+        $this->cartRepository->save($quote);
         $this->checkoutSession->setLastQuoteId($quote->getId())
             ->setLastSuccessQuoteId($quote->getId())
             ->setLastOrderId($order->getId())

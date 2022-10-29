@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -13,26 +12,24 @@
  * @link      https://www.buybox.net/
  */
 
+declare(strict_types=1);
+
 namespace BuyBox\Payment\Controller\Payment;
 
 use BuyBox\Payment\Gateway\Config\Config;
 use BuyBox\Payment\Helper\Url;
 use Exception;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\ActionInterface;
-use Magento\Framework\App\CsrfAwareActionInterface;
-use Magento\Framework\App\Request\InvalidRequestException;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\RedirectFactory as ResultRedirectFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
-class Redirect extends \Magento\Framework\App\Action\Action
+class Redirect implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var CheckoutSession
@@ -45,34 +42,54 @@ class Redirect extends \Magento\Framework\App\Action\Action
     private $orderRepository;
 
     /**
+     * @var MessageManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var ResultRedirectFactory
+     */
+    private $resultRedirectFactory;
+
+    /**
      * @var Url
      */
     private $url;
 
+    /**
+     * Redirect constructor.
+     *
+     * @param CheckoutSession $checkoutSession
+     * @param OrderRepositoryInterface $orderRepository
+     * @param MessageManagerInterface $messageManager
+     * @param ResultRedirectFactory $resultRedirectFactory
+     * @param Url $url
+     */
     public function __construct(
-        Context $context,
         CheckoutSession $checkoutSession,
         OrderRepositoryInterface $orderRepository,
+        MessageManagerInterface $messageManager,
+        ResultRedirectFactory $resultRedirectFactory,
         Url $url
     ) {
-        parent::__construct($context);
-        $this->url = $url;
         $this->checkoutSession = $checkoutSession;
         $this->orderRepository = $orderRepository;
+        $this->messageManager = $messageManager;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->url = $url;
     }
 
     /**
      * Execute.
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return ResultInterface
      */
-    public function execute(): \Magento\Framework\Controller\Result\Redirect
+    public function execute(): ResultInterface
     {
         $redirect = $this->resultRedirectFactory->create();
 
         try {
             $order = $this->checkoutSession->getLastRealOrder();
-
             if (!$order) {
                 throw new LocalizedException(__('Cannot get order information from session'));
             }
@@ -82,31 +99,24 @@ class Redirect extends \Magento\Framework\App\Action\Action
                 throw new LocalizedException(__('Cannot get payment information from session'));
             }
 
-            if (null == $payment->getAdditionalInformation('token')) {
+            $paymentInformation = $payment->getAdditionalInformation();
+
+            if (
+                !isset($paymentInformation[Config::KEY_TOKEN])
+                || $paymentInformation[Config::KEY_TOKEN] == null
+            ) {
                 throw new LocalizedException(__('Error getting token information from session'));
             }
 
-            $comment = __('Successfully created Payment Token. customer is Redirected to the payment interface');
-
-            if (
-                method_exists($order, 'addCommentToStatusHistory')
-                && is_callable([$order, 'addCommentToStatusHistory'])
-            ) {
-                $order->addCommentToStatusHistory(
-                    $comment,
-                    Order::STATE_PENDING_PAYMENT
-                );
-            } else {
-                $order->addStatusHistoryComment(
-                    $comment,
-                    Order::STATE_PENDING_PAYMENT
-                );
-            }
+            $order->addCommentToStatusHistory(
+                __('Successfully created Payment Token. customer is Redirected to the payment interface'),
+                Order::STATE_PENDING_PAYMENT
+            );
 
             $this->orderRepository->save($order);
 
             return $redirect->setUrl(
-                $this->url->getRedirectUrl((string)$payment->getAdditionalInformation('token'))
+                $this->url->getRedirectUrl($paymentInformation[Config::KEY_TOKEN])
             );
         } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
