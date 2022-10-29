@@ -1,5 +1,4 @@
 <?php
-
 /**
  * BuyBox payment module for Magento
  *
@@ -22,12 +21,8 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\UrlInterface;
 use BuyBox\Payment\Gateway\Config\Config;
 
-/**
- * Class ConfigProvider
- */
 final class ConfigProvider implements ConfigProviderInterface
 {
-
     const KEY_REDIRECT_URL = 'redirect_url';
     const KEY_CODE = 'code';
 
