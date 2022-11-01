@@ -1,16 +1,15 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento
- *
+ * BuyBox Gift Card payment module for Magento.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
- * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- * @link      https://www.buybox.net/
+ *
+ * @see      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -32,9 +31,6 @@ class VoidHandler implements HandlerInterface
      */
     private $transactionRepository;
 
-    /**
-     * @param TransactionRepositoryInterface $transactionRepository
-     */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository
     ) {
@@ -44,9 +40,6 @@ class VoidHandler implements HandlerInterface
     /**
      * Handle.
      *
-     * @param array $handlingSubject
-     * @param array $response
-     * @return void
      * @throws LocalizedException
      */
     public function handle(array $handlingSubject, array $response): void
@@ -69,8 +62,8 @@ class VoidHandler implements HandlerInterface
     /**
      * Get transaction type auth.
      *
-     * @param InfoInterface $payment
      * @return ?TransactionInterface
+     *
      * @throws InputException
      */
     protected function getTransactionTypeAuth(InfoInterface $payment): ?TransactionInterface
