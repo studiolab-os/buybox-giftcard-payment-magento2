@@ -1,6 +1,7 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento.
+ * BuyBox Gift Card payment module for Magento
+ *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
@@ -8,8 +9,7 @@
  *
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- *
- * @see      https://www.buybox.net/
+ * @link      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -22,9 +22,11 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class Payment extends Fieldset
 {
     /**
-     * Add custom css class.
+     * Add custom css class
      *
      * @param AbstractElement $element
+     *
+     * @return string
      */
     protected function _getFrontendClass($element): string
     {
@@ -32,9 +34,10 @@ class Payment extends Fieldset
     }
 
     /**
-     * Return header title part of html for payment solution.
+     * Return header title part of html for payment solution
      *
      * @param AbstractElement $element
+     * @return string
      */
     protected function _getHeaderTitleHtml($element): string
     {
@@ -68,9 +71,10 @@ class Payment extends Fieldset
     }
 
     /**
-     * Return header comment part of html for payment solution.
+     * Return header comment part of html for payment solution
      *
      * @param AbstractElement $element
+     * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getHeaderCommentHtml($element): string
@@ -79,10 +83,9 @@ class Payment extends Fieldset
     }
 
     /**
-     * Get collapsed state on-load.
+     * Get collapsed state on-load
      *
      * @param AbstractElement $element
-     *
      * @return false
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -95,6 +98,7 @@ class Payment extends Fieldset
      * Return extra Js.
      *
      * @param AbstractElement $element
+     * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getExtraJs($element): string

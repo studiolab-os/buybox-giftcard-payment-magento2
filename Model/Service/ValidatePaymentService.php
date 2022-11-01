@@ -1,15 +1,16 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento.
+ * BuyBox Gift Card payment module for Magento
+ *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
+ * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- *
- * @see      https://www.buybox.net/
+ * @link      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -55,6 +56,13 @@ class ValidatePaymentService
      */
     private $orderManagement;
 
+    /**
+     * @param OrderRepositoryInterface $orderRepository
+     * @param OrderPaymentRepositoryInterface $paymentRepository
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param BuilderInterface $transactionBuilder
+     * @param OrderManagementInterface $orderManagement
+     */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         OrderPaymentRepositoryInterface $paymentRepository,
@@ -72,6 +80,10 @@ class ValidatePaymentService
     /**
      * Execute.
      *
+     * @param Order $order
+     * @param array $paymentData
+     * @param string $transactionType
+     * @return void
      * @throws LocalizedException
      */
     public function execute(Order $order, array $paymentData, string $transactionType): void
@@ -131,6 +143,11 @@ class ValidatePaymentService
 
     /**
      * Create Transaction.
+     *
+     * @param Order $order
+     * @param array $paymentData
+     * @param string $transactionType
+     * @return TransactionInterface
      */
     private function createTransaction(Order $order, array $paymentData, string $transactionType): TransactionInterface
     {

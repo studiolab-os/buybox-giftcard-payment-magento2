@@ -1,15 +1,16 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento.
+ * BuyBox Gift Card payment module for Magento
+ *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
+ * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- *
- * @see      https://www.buybox.net/
+ * @link      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -21,11 +22,11 @@ use Magento\Framework\Locale\Resolver;
 
 class Url
 {
-    public const REDIRECT_URL = 'https://%s/secure/payment_login.php';
-    public const REDIRECT_URL_PARAMS = [
+    const REDIRECT_URL = 'https://%s/secure/payment_login.php';
+    const REDIRECT_URL_PARAMS = [
         'useraction' => 'commit',
-        'token'      => '%s',
-        'lang'       => '%s'
+        'token' => '%s',
+        'lang' => '%s'
     ];
 
     /**
@@ -38,6 +39,10 @@ class Url
      */
     private $config;
 
+    /**
+     * @param Resolver $localeResolver
+     * @param Config $config
+     */
     public function __construct(Resolver $localeResolver, Config $config)
     {
         $this->localeResolver = $localeResolver;
@@ -46,6 +51,9 @@ class Url
 
     /**
      * Get Redirect Url.
+     *
+     * @param string $token
+     * @return string
      */
     public function getRedirectUrl(string $token): string
     {

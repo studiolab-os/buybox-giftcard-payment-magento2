@@ -1,15 +1,16 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento.
+ * BuyBox Gift Card payment module for Magento
+ *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
+ * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- *
- * @see      https://www.buybox.net/
+ * @link      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -27,10 +28,10 @@ use Zend_Http_Client;
 
 class BuyBoxPayment
 {
-    public const ORDER_STATUS_AUTHORIZED_CODE = 'authorized';
-    public const ORDER_STATUS_AUTHORIZED_LABEL = 'Authorized';
-    public const ORDER_STATE_AUTHORIZED_CODE = 'authorized';
-    public const ORDER_STATE_AUTHORIZED_LABEL = 'Authorized';
+    const ORDER_STATUS_AUTHORIZED_CODE = 'authorized';
+    const ORDER_STATUS_AUTHORIZED_LABEL = 'Authorized';
+    const ORDER_STATE_AUTHORIZED_CODE = 'authorized';
+    const ORDER_STATE_AUTHORIZED_LABEL = 'Authorized';
 
     /**
      * @var ValidatePaymentService
@@ -52,6 +53,12 @@ class BuyBoxPayment
      */
     private $config;
 
+    /**
+     * @param ValidatePaymentService $validatePaymentService
+     * @param CreateInvoiceService $createInvoiceService
+     * @param RestClient $restClient
+     * @param Config $config
+     */
     public function __construct(
         ValidatePaymentService $validatePaymentService,
         CreateInvoiceService $createInvoiceService,
@@ -69,7 +76,7 @@ class BuyBoxPayment
      *
      * @param Order $order
      * @param $params
-     *
+     * @return void
      * @throws LocalizedException
      */
     public function process(Order $order, $params): void
@@ -99,16 +106,15 @@ class BuyBoxPayment
      *
      * @param OrderInterface $order
      * @param $params
-     *
      * @return array|null
      * @throws LocalizedException
      */
     public function doExpressCheckout(OrderInterface $order, $params): ?array
     {
         $params = array_merge([
-            RestClient::KEY_METHOD   => Config::METHOD_DO_EXPRESS_CHECKOUT_PAYMENT,
+            RestClient::KEY_METHOD => Config::METHOD_DO_EXPRESS_CHECKOUT_PAYMENT,
             RestClient::KEY_PAYER_ID => $params['PayerID'],
-            RestClient::KEY_TOKEN    => $params['token']
+            RestClient::KEY_TOKEN => $params['token']
         ], $this->getDefaultParams($order), $this->config->getAuthenticationParams());
 
         return $this->restClient->callApi(
@@ -120,6 +126,7 @@ class BuyBoxPayment
 
     /**
      * Get Default Params.
+     *
      * @param OrderInterface $order
      * @return array
      */
@@ -127,8 +134,8 @@ class BuyBoxPayment
     {
         return [
             RestClient::KEY_PAYMENT_ACTION => Config::PAYMENT_ACTION_MAP[$this->config->getPaymentAction()],
-            RestClient::KEY_AMOUNT         => $order->getGrandTotal(),
-            RestClient::KEY_CURRENCY_CODE  => $order->getStoreCurrencyCode()
+            RestClient::KEY_AMOUNT => $order->getGrandTotal(),
+            RestClient::KEY_CURRENCY_CODE => $order->getStoreCurrencyCode()
         ];
     }
 }

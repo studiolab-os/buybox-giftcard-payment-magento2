@@ -1,6 +1,7 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento.
+ * BuyBox Gift Card payment module for Magento
+ *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
@@ -8,8 +9,7 @@
  *
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- *
- * @see      https://www.buybox.net/
+ * @link      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -58,6 +58,12 @@ class Redirect implements HttpPostActionInterface, HttpGetActionInterface
 
     /**
      * Redirect constructor.
+     *
+     * @param CheckoutSession $checkoutSession
+     * @param OrderRepositoryInterface $orderRepository
+     * @param MessageManagerInterface $messageManager
+     * @param ResultRedirectFactory $resultRedirectFactory
+     * @param Url $url
      */
     public function __construct(
         CheckoutSession $checkoutSession,
@@ -75,6 +81,8 @@ class Redirect implements HttpPostActionInterface, HttpGetActionInterface
 
     /**
      * Execute.
+     *
+     * @return ResultInterface
      */
     public function execute(): ResultInterface
     {

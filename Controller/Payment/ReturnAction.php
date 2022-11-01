@@ -1,15 +1,16 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento.
+ * BuyBox Gift Card payment module for Magento
+ *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
+ * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- *
- * @see      https://www.buybox.net/
+ * @link      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -78,6 +79,15 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
 
     /**
      * ReturnAction constructor.
+     *
+     * @param RequestInterface $request
+     * @param CheckoutSession $checkoutSession
+     * @param CartRepositoryInterface $cartRepository
+     * @param OrderRepositoryInterface $orderRepository
+     * @param BuyBoxPayment $buyBoxPayment
+     * @param MessageManagerInterface $messageManager
+     * @param ResultRedirectFactory $resultRedirectFactory
+     * @param Config $config
      */
     public function __construct(
         RequestInterface $request,
@@ -101,6 +111,8 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
 
     /**
      * Execute.
+     *
+     * @return ResultInterface
      */
     public function execute(): ResultInterface
     {
@@ -146,6 +158,10 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
 
     /**
      * Validate params.
+     *
+     * @param OrderPaymentInterface $payment
+     * @param array $params
+     * @return bool
      */
     private function validateParams(OrderPaymentInterface $payment, array $params): bool
     {
@@ -163,6 +179,8 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
     /**
      * Restore quote.
      *
+     * @param OrderInterface $order
+     * @return void
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */

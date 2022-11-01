@@ -1,27 +1,28 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento.
+ * BuyBox Gift Card payment module for Magento
+ *
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
+ * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- *
- * @see      https://www.buybox.net/
+ * @link      https://www.buybox.net/
  */
 
 declare(strict_types=1);
 
 namespace BuyBox\Payment\Gateway\Http\Client;
 
-use BuyBox\Payment\Gateway\Config\Config;
-use BuyBox\Payment\Model\RestClient;
 use Exception;
 use InvalidArgumentException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
+use BuyBox\Payment\Gateway\Config\Config;
+use BuyBox\Payment\Model\RestClient;
 use Zend_Http_Client;
 
 class Client implements ClientInterface
@@ -36,6 +37,11 @@ class Client implements ClientInterface
      */
     private $restClient;
 
+
+    /**
+     * @param Config $config
+     * @param RestClient $restClient
+     */
     public function __construct(Config $config, RestClient $restClient)
     {
         $this->config = $config;
@@ -43,7 +49,10 @@ class Client implements ClientInterface
     }
 
     /**
-     * Places request to gateway. Returns result as ENV array.
+     * Places request to gateway. Returns result as ENV array
+     *
+     * @param TransferInterface $transferObject
+     * @return array
      */
     public function placeRequest(TransferInterface $transferObject): array
     {
