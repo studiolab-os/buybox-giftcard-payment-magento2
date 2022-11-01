@@ -1,16 +1,15 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento
- *
+ * BuyBox Gift Card payment module for Magento.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
- * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- * @link      https://www.buybox.net/
+ *
+ * @see      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -21,7 +20,6 @@ use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use BuyBox\Payment\Gateway\Request\MockDataRequest;
 
 class TransferFactory implements TransferFactoryInterface
 {
@@ -35,10 +33,6 @@ class TransferFactory implements TransferFactoryInterface
      */
     private $logger;
 
-    /**
-     * @param TransferBuilder $transferBuilder
-     * @param Logger $logger
-     */
     public function __construct(
         TransferBuilder $transferBuilder,
         Logger $logger
@@ -48,10 +42,7 @@ class TransferFactory implements TransferFactoryInterface
     }
 
     /**
-     * Builds gateway transfer object
-     *
-     * @param array $request
-     * @return TransferInterface
+     * Builds gateway transfer object.
      */
     public function create(array $request): TransferInterface
     {
