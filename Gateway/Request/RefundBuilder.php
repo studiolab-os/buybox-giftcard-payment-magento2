@@ -1,16 +1,15 @@
 <?php
 /**
- * BuyBox Gift Card payment module for Magento
- *
+ * BuyBox Gift Card payment module for Magento.
  *
  * LICENSE: This source file is subject to the version 3.0 of the Open
  * Software License (OSL-3.0) that is available through the world-wide-web
  * at the following URI: http://opensource.org/licenses/OSL-3.0.
  *
- * @package   BuyBox\Payment
  * @author    Studiolab <contact@studiolab.fr>
  * @license   http://opensource.org/licenses/OSL-3.0
- * @link      https://www.buybox.net/
+ *
+ * @see      https://www.buybox.net/
  */
 
 declare(strict_types=1);
@@ -26,10 +25,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 class RefundBuilder implements BuilderInterface
 {
     /**
-     * Builds Refund request
-     *
-     * @param array $buildSubject
-     * @return array
+     * Builds Refund request.
      */
     public function build(array $buildSubject): array
     {
@@ -40,19 +36,15 @@ class RefundBuilder implements BuilderInterface
         $buybox_data = $payment->getAdditionalInformation('buybox_data');
 
         return [
-            RestClient::KEY_METHOD => Config::METHOD_REFUND_TRANSACTION,
+            RestClient::KEY_METHOD         => Config::METHOD_REFUND_TRANSACTION,
             RestClient::KEY_TRANSACTION_ID => $buybox_data[RestClient::KEY_TRANSACTION_ID],
-            RestClient::KEY_AMOUNT => $amount,
-            RestClient::KEY_REFUND_TYPE => $this->getRefundType($order, $amount)
+            RestClient::KEY_AMOUNT         => $amount,
+            RestClient::KEY_REFUND_TYPE    => $this->getRefundType($order, $amount)
         ];
     }
 
     /**
-     * Get refund type
-     *
-     * @param OrderAdapterInterface $order
-     * @param float $amount
-     * @return string
+     * Get refund type.
      */
     private function getRefundType(OrderAdapterInterface $order, float $amount): string
     {
