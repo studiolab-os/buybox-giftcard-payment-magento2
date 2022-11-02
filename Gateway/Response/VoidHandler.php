@@ -23,6 +23,7 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Sales\Model\Order;
 
 class VoidHandler implements HandlerInterface
 {
@@ -53,16 +54,13 @@ class VoidHandler implements HandlerInterface
         $payment->setParentTransactionId($authorizationTransaction->getTxnId());
         $payment->setTransactionId($authorizationTransaction->getTxnId() . '-void');
 
-        $payment->setAmountPaid(0)
-            ->setAmountCanceled($order->getGrandTotalAmount())
-            ->setBaseAmountAuthorized(0)
-            ->setAmountAuthorized(0);
+        $payment
+            ->setIsTransactionClosed(1)
+            ->setShouldCloseParentTransaction(1);
     }
 
     /**
      * Get transaction type auth.
-     *
-     * @return ?TransactionInterface
      *
      * @throws InputException
      */
