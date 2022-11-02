@@ -84,7 +84,7 @@ class Cancel implements HttpPostActionInterface, HttpGetActionInterface
 
             $this->orderRepository->save($order);
 
-            $this->messageManager->addNoticeMessage('You cancel the order.');
+            $this->messageManager->addNoticeMessage('You canceled the order.');
 
             return $redirect->setPath('checkout/onepage/failure');
         } catch (Exception $e) {
