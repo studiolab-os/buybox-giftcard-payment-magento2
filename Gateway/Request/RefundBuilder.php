@@ -39,7 +39,7 @@ class RefundBuilder implements BuilderInterface
             RestClient::KEY_METHOD         => Config::METHOD_REFUND_TRANSACTION,
             RestClient::KEY_TRANSACTION_ID => $buybox_data[RestClient::KEY_TRANSACTION_ID],
             RestClient::KEY_AMOUNT         => $amount,
-            RestClient::KEY_REFUND_TYPE    => $this->getRefundType($order, $amount)
+            RestClient::KEY_REFUND_TYPE    => $this->getRefundType($order, (float)$amount)
         ];
     }
 
