@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -20,7 +21,6 @@ use BuyBox\Payment\Model\RestClient;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
-use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface as TransactionBuilderInterface;
@@ -30,31 +30,24 @@ class RefundHandler implements HandlerInterface
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
-
-    /**
-     * @var OrderPaymentRepositoryInterface
-     */
-    private $paymentRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @var TransactionBuilderInterface
      */
-    private $transactionBuilder;
+    private TransactionBuilderInterface $transactionBuilder;
 
     /**
      * @var TransactionRepositoryInterface
      */
-    private $transactionRepository;
+    private TransactionRepositoryInterface $transactionRepository;
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        OrderPaymentRepositoryInterface $paymentRepository,
         TransactionBuilderInterface $transactionBuilder,
         TransactionRepositoryInterface $transactionRepository
     ) {
         $this->orderRepository = $orderRepository;
-        $this->paymentRepository = $paymentRepository;
         $this->transactionBuilder = $transactionBuilder;
         $this->transactionRepository = $transactionRepository;
     }
