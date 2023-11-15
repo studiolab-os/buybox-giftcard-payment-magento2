@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -33,13 +34,13 @@ class RefundBuilder implements BuilderInterface
         $amount = SubjectReader::readAmount($buildSubject);
         $payment = $paymentDo->getPayment();
         $order = $paymentDo->getOrder();
-        $buybox_data = $payment->getAdditionalInformation('buybox_data');
+        $buyBoxData = $payment->getAdditionalInformation('buybox_data');
 
         return [
-            RestClient::KEY_METHOD         => Config::METHOD_REFUND_TRANSACTION,
-            RestClient::KEY_TRANSACTION_ID => $buybox_data[RestClient::KEY_TRANSACTION_ID],
-            RestClient::KEY_AMOUNT         => $amount,
-            RestClient::KEY_REFUND_TYPE    => $this->getRefundType($order, (float)$amount)
+            RestClient::KEY_METHOD => Config::METHOD_REFUND_TRANSACTION,
+            RestClient::KEY_TRANSACTION_ID => $buyBoxData[RestClient::KEY_TRANSACTION_ID],
+            RestClient::KEY_AMOUNT => $amount,
+            RestClient::KEY_REFUND_TYPE => $this->getRefundType($order, (float)$amount)
         ];
     }
 

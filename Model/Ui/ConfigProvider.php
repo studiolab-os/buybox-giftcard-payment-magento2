@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -26,9 +27,9 @@ final class ConfigProvider implements ConfigProviderInterface
     public const KEY_CODE = 'code';
 
     /**
-     * @var UrlInterface
+     * @var Config
      */
-    private $config;
+    private Config $config;
 
     public function __construct(
         Config $config
@@ -44,7 +45,7 @@ final class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 Config::CODE => [
-                    self::KEY_CODE         => Config::CODE,
+                    self::KEY_CODE => Config::CODE,
                     self::KEY_REDIRECT_URL => $this->config->getUrl(Config::ACTION_REDIRECT),
                 ]
             ]

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -39,42 +40,37 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
     /**
      * @var RequestInterface
      */
-    private $request;
+    private RequestInterface $request;
 
     /**
      * @var CheckoutSession
      */
-    private $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
     /**
      * @var CartRepositoryInterface
      */
-    private $cartRepository;
+    private CartRepositoryInterface $cartRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @var BuyBoxPayment
      */
-    private $buyBoxPayment;
+    private BuyBoxPayment $buyBoxPayment;
 
     /**
      * @var MessageManagerInterface
      */
-    private $messageManager;
+    private MessageManagerInterface $messageManager;
 
     /**
      * @var ResultRedirectFactory
      */
-    private $resultRedirectFactory;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private ResultRedirectFactory $resultRedirectFactory;
 
     /**
      * ReturnAction constructor.
@@ -86,8 +82,7 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
         OrderRepositoryInterface $orderRepository,
         BuyBoxPayment $buyBoxPayment,
         MessageManagerInterface $messageManager,
-        ResultRedirectFactory $resultRedirectFactory,
-        Config $config
+        ResultRedirectFactory $resultRedirectFactory
     ) {
         $this->request = $request;
         $this->checkoutSession = $checkoutSession;
@@ -96,7 +91,6 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
         $this->buyBoxPayment = $buyBoxPayment;
         $this->messageManager = $messageManager;
         $this->resultRedirectFactory = $resultRedirectFactory;
-        $this->config = $config;
     }
 
     /**
@@ -109,8 +103,8 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
 
         try {
             $order = $this->checkoutSession->getLastRealOrder();
-            if (!$order || !$order->getEntityId()) {
-                throw new LocalizedException(__('Cannot get order information from session'));
+            if (!$order->getEntityId()) {
+                throw new LocalizedException(__('Cannot get order information from session.'));
             }
 
             $payment = $order->getPayment();
@@ -122,11 +116,11 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
 
             if (!$this->validateParams($payment, $params)) {
                 $this->restoreQuote($order);
-                throw new LocalizedException(__('Error getting token information from session'));
+                throw new LocalizedException(__('Error getting token information from session.'));
             }
 
             $order->addCommentToStatusHistory(
-                __('Customer is back from BuyBox payment page.'),
+                __('Customer is back from BuyBox payment page.')->render(),
                 Order::STATE_PENDING_PAYMENT
             );
 
@@ -171,7 +165,7 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
         try {
             $quote = $this->cartRepository->get($order->getQuoteId());
         } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('Cannot get order information from session'));
+            throw new LocalizedException(__('Cannot get order information from session.'));
         }
 
         $quote->setIsActive(true);

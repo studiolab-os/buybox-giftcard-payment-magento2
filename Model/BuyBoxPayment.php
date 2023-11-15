@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -23,7 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order;
-use Zend_Http_Client;
 
 class BuyBoxPayment
 {
@@ -35,22 +35,22 @@ class BuyBoxPayment
     /**
      * @var ValidatePaymentService
      */
-    private $validatePaymentService;
+    private ValidatePaymentService $validatePaymentService;
 
     /**
      * @var CreateInvoiceService
      */
-    private $createInvoiceService;
+    private CreateInvoiceService $createInvoiceService;
 
     /**
      * @var RestClient
      */
-    private $restClient;
+    private RestClient $restClient;
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     public function __construct(
         ValidatePaymentService $validatePaymentService,
@@ -114,7 +114,7 @@ class BuyBoxPayment
         return $this->restClient->callApi(
             $this->config->getApiEndpoint(),
             $params,
-            Zend_Http_Client::POST
+            RestClient::HTTP_METHOD_POST
         );
     }
 

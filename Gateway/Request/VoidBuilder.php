@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -32,7 +33,7 @@ class VoidBuilder implements BuilderInterface
         $payment = $paymentDo->getPayment();
 
         return [
-            RestClient::KEY_METHOD           => Config::METHOD_DO_VOID,
+            RestClient::KEY_METHOD => Config::METHOD_DO_VOID,
             RestClient::KEY_AUTHORIZATION_ID => $payment->getLastTransId()
         ];
     }
