@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -19,6 +20,7 @@ namespace BuyBox\Payment\Gateway\Response;
 use BuyBox\Payment\Model\RestClient;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Sales\Model\Order\Payment;
 
 class CaptureHandler implements HandlerInterface
 {
@@ -31,6 +33,7 @@ class CaptureHandler implements HandlerInterface
         $order = $paymentDO->getOrder();
         $payment = $paymentDO->getPayment();
 
+        /** @var Payment $payment */
         $payment->setAmountPaid($order->getGrandTotalAmount());
         $payment->setParentTransactionId($payment->getLastTransId());
         $payment->setLastTransId($response[RestClient::KEY_TRANSACTION_ID]);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -23,14 +24,14 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 
 class VoidHandler implements HandlerInterface
 {
     /**
      * @var TransactionRepositoryInterface
      */
-    private $transactionRepository;
+    private TransactionRepositoryInterface $transactionRepository;
 
     public function __construct(
         TransactionRepositoryInterface $transactionRepository
@@ -42,21 +43,21 @@ class VoidHandler implements HandlerInterface
      * Handle.
      *
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handle(array $handlingSubject, array $response): void
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
-        $order = $paymentDO->getOrder();
+        $authorization = $this->getTransactionTypeAuth($payment);
 
-        $authorizationTransaction = $this->getTransactionTypeAuth($payment);
-
-        $payment->setParentTransactionId($authorizationTransaction->getTxnId());
-        $payment->setTransactionId($authorizationTransaction->getTxnId() . '-void');
+        /** @var Payment $payment */
+        $payment->setParentTransactionId($authorization->getTxnId());
+        $payment->setTransactionId($authorization->getTxnId() . '-void');
 
         $payment
-            ->setIsTransactionClosed(1)
-            ->setShouldCloseParentTransaction(1);
+            ->setIsTransactionClosed(true)
+            ->setShouldCloseParentTransaction(true);
     }
 
     /**

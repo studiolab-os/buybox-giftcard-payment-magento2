@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -31,8 +32,8 @@ class OrderBuilder implements BuilderInterface
         $order = $paymentDo->getOrder();
 
         return [
-            RestClient::KEY_INV_NUM       => $order->getOrderIncrementId(),
-            RestClient::KEY_AMOUNT        => $order->getGrandTotalAmount(),
+            RestClient::KEY_INV_NUM => $order->getOrderIncrementId(),
+            RestClient::KEY_AMOUNT => $order->getGrandTotalAmount(),
             RestClient::KEY_CURRENCY_CODE => $order->getCurrencyCode(),
         ];
     }

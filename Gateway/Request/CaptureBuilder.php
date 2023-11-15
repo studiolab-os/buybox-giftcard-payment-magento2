@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -32,9 +33,9 @@ class CaptureBuilder implements BuilderInterface
         $payment = $paymentDo->getPayment();
 
         return [
-            RestClient::KEY_METHOD           => Config::METHOD_DO_CAPTURE,
+            RestClient::KEY_METHOD => Config::METHOD_DO_CAPTURE,
             RestClient::KEY_AUTHORIZATION_ID => $payment->getLastTransId(),
-            RestClient::KEY_COMPLETE_TYPE    => 'Complete',
+            RestClient::KEY_COMPLETE_TYPE => 'Complete',
         ];
     }
 }
