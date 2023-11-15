@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -26,6 +27,7 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 
 class ValidatePaymentService
@@ -33,27 +35,27 @@ class ValidatePaymentService
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    private $paymentRepository;
+    private OrderPaymentRepositoryInterface $paymentRepository;
 
     /**
      * @var TransactionRepositoryInterface
      */
-    private $transactionRepository;
+    private TransactionRepositoryInterface $transactionRepository;
 
     /**
      * @var BuilderInterface
      */
-    private $transactionBuilder;
+    private BuilderInterface $transactionBuilder;
 
     /**
      * @var OrderManagementInterface
      */
-    private $orderManagement;
+    private OrderManagementInterface $orderManagement;
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
@@ -88,6 +90,7 @@ class ValidatePaymentService
             $this->orderRepository->save($order);
 
             // get payment object from order object
+            /** @var Payment $payment */
             $payment = $order->getPayment();
 
             $payment->setLastTransId(
@@ -100,9 +103,7 @@ class ValidatePaymentService
                 ($transactionType == TransactionInterface::TYPE_CAPTURE)
             )->setIsTransactionPending(
                 !($transactionType == TransactionInterface::TYPE_CAPTURE)
-            )->setParentTransactionId(
-                null
-            );
+            )->setParentTransactionId('');
 
             $transaction = $this->createTransaction($order, $paymentData, $transactionType);
 
@@ -114,7 +115,7 @@ class ValidatePaymentService
                 'The %1 amount is %2.',
                 $transactionType == TransactionInterface::TYPE_CAPTURE ? 'captured' : 'authorized',
                 $formattedPrice
-            );
+            )->render();
 
             $payment->addTransactionCommentsToOrder($transaction, $message);
 
@@ -136,6 +137,7 @@ class ValidatePaymentService
     {
         $payment = $order->getPayment();
 
+        /** @var TransactionInterface $transaction */
         $transaction = $this->transactionBuilder->setPayment($payment)
             ->setOrder($order)
             ->setTransactionId($paymentData[RestClient::KEY_TRANSACTION_ID])

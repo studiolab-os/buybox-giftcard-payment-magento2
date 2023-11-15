@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -14,7 +15,7 @@
 
 declare(strict_types=1);
 
-namespace BuyBox\Payment\Helper;
+namespace BuyBox\Payment\Model;
 
 use BuyBox\Payment\Gateway\Config\Config;
 use Magento\Framework\Locale\Resolver;
@@ -31,12 +32,12 @@ class Url
     /**
      * @var Resolver
      */
-    private $localeResolver;
+    private Resolver $localeResolver;
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     public function __construct(Resolver $localeResolver, Config $config)
     {

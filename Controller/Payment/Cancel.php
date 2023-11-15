@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -32,22 +33,22 @@ class Cancel implements HttpPostActionInterface, HttpGetActionInterface
     /**
      * @var CheckoutSession
      */
-    private $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @var ManagerInterface
      */
-    private $messageManager;
+    private ManagerInterface $messageManager;
 
     /**
      * @var ResultRedirectFactory
      */
-    private $resultRedirectFactory;
+    private ResultRedirectFactory $resultRedirectFactory;
 
     /**
      * Cancel constructor.
@@ -74,22 +75,25 @@ class Cancel implements HttpPostActionInterface, HttpGetActionInterface
         try {
             $order = $this->checkoutSession->getLastRealOrder();
 
-            if (!$order) {
-                throw new LocalizedException(__('Cannot get order information from session'));
+            if (!$order->getId()) {
+                throw new LocalizedException(__('Cannot get order information from session.'));
             }
 
             $order->setState(Order::STATE_CANCELED);
             $order->setStatus(Order::STATE_CANCELED);
-            $order->addCommentToStatusHistory(__('Order Canceled By customer.'), Order::STATE_CANCELED);
+            $order->addCommentToStatusHistory(
+                __('Order Canceled By customer.')->render(),
+                Order::STATE_CANCELED
+            );
 
             $this->orderRepository->save($order);
 
-            $this->messageManager->addNoticeMessage('You canceled the order.');
-
-            return $redirect->setPath('checkout/onepage/failure');
+            $this->checkoutSession->restoreQuote();
         } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
+
+        $this->messageManager->addNoticeMessage('You canceled the payment.');
 
         return $redirect->setPath('checkout/cart');
     }

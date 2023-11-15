@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -25,6 +26,7 @@ use Psr\Log\LoggerInterface;
 
 class RestClient
 {
+    public const HTTP_METHOD_POST = 'POST';
     public const RESPONSE_SUCCESS = 'Success';
     public const RESPONSE_KEY_FAILURE = 'Failure';
     public const RESPONSE_KEY_ACK = 'ACK';
@@ -52,22 +54,22 @@ class RestClient
     /**
      * @var Curl
      */
-    private $curl;
+    private Curl $curl;
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var PaymentLogger
      */
-    private $paymentLogger;
+    private PaymentLogger $paymentLogger;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(Curl $curl, Config $config, PaymentLogger $paymentLogger, LoggerInterface $logger)
     {
