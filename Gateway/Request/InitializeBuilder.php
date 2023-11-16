@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -25,7 +26,7 @@ class InitializeBuilder implements BuilderInterface
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     public function __construct(Config $config)
     {
@@ -38,7 +39,7 @@ class InitializeBuilder implements BuilderInterface
     public function build(array $buildSubject): array
     {
         return [
-            RestClient::KEY_METHOD         => Config::METHOD_SET_EXPRESS_CHECKOUT,
+            RestClient::KEY_METHOD => Config::METHOD_SET_EXPRESS_CHECKOUT,
             RestClient::KEY_PAYMENT_ACTION => Config::PAYMENT_ACTION_MAP[$this->config->getPaymentAction()]
         ];
     }

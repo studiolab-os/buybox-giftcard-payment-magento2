@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -31,22 +32,22 @@ class CreateInvoiceService
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    protected OrderRepositoryInterface $orderRepository;
 
     /**
      * @var InvoiceService
      */
-    protected $invoiceService;
+    protected InvoiceService $invoiceService;
 
     /**
      * @var InvoiceSender
      */
-    protected $invoiceSender;
+    protected InvoiceSender $invoiceSender;
 
     /**
      * @var Transaction
      */
-    protected $transaction;
+    protected Transaction $transaction;
 
     /**
      * CreateInvoiceService constructor.
@@ -77,7 +78,7 @@ class CreateInvoiceService
                 $order->getPayment()->getLastTransId()
             )->setRequestedCaptureCase(Invoice::CAPTURE_OFFLINE);
 
-            $invoice->getOrder()->setCustomerNoteNotify(true);
+            $invoice->getOrder()->setCustomerNoteNotify(1);
             $invoice->getOrder()->setIsInProcess(true);
             $invoice->register();
 

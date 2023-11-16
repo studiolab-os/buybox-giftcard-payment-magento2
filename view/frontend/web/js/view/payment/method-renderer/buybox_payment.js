@@ -26,9 +26,8 @@ define(
                 template: 'BuyBox_Payment/payment/form'
             },
             initObservable: function () {
-                return this;
+                return this._super();
             },
-
             getCode: function () {
                 return window.checkoutConfig.payment[this.item.method].code;
             },

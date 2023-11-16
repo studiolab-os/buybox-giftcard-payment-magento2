@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -19,26 +20,18 @@ namespace BuyBox\Payment\Gateway\Http;
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
-use Magento\Payment\Model\Method\Logger;
 
 class TransferFactory implements TransferFactoryInterface
 {
     /**
      * @var TransferBuilder
      */
-    private $transferBuilder;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private TransferBuilder $transferBuilder;
 
     public function __construct(
         TransferBuilder $transferBuilder,
-        Logger $logger
     ) {
         $this->transferBuilder = $transferBuilder;
-        $this->logger = $logger;
     }
 
     /**

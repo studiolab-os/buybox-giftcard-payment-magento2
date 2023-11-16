@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -22,19 +23,18 @@ use Exception;
 use InvalidArgumentException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
-use Zend_Http_Client;
 
 class Client implements ClientInterface
 {
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var RestClient
      */
-    private $restClient;
+    private RestClient $restClient;
 
     public function __construct(Config $config, RestClient $restClient)
     {
@@ -51,7 +51,7 @@ class Client implements ClientInterface
             $response = $this->restClient->callApi(
                 $this->config->getApiEndpoint(),
                 $transferObject->getBody(),
-                Zend_Http_Client::POST
+                RestClient::HTTP_METHOD_POST
             );
         } catch (Exception $e) {
             throw new InvalidArgumentException($e->getMessage());

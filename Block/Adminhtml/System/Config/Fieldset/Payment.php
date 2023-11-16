@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -19,6 +20,7 @@ namespace BuyBox\Payment\Block\Adminhtml\System\Config\Fieldset;
 use Magento\Config\Block\System\Config\Form\Fieldset;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+//phpcs:ignoreFile
 class Payment extends Fieldset
 {
     /**

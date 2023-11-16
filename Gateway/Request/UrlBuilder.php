@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -25,7 +26,7 @@ class UrlBuilder implements BuilderInterface
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     public function __construct(
         Config $config
