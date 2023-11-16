@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -17,7 +18,7 @@ declare(strict_types=1);
 namespace BuyBox\Payment\Controller\Payment;
 
 use BuyBox\Payment\Gateway\Config\Config;
-use BuyBox\Payment\Helper\Url;
+use BuyBox\Payment\Model\Url;
 use Exception;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -34,27 +35,27 @@ class Redirect implements HttpPostActionInterface, HttpGetActionInterface
     /**
      * @var CheckoutSession
      */
-    private $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    private OrderRepositoryInterface $orderRepository;
 
     /**
      * @var MessageManagerInterface
      */
-    private $messageManager;
+    private MessageManagerInterface $messageManager;
 
     /**
      * @var ResultRedirectFactory
      */
-    private $resultRedirectFactory;
+    private ResultRedirectFactory $resultRedirectFactory;
 
     /**
      * @var Url
      */
-    private $url;
+    private Url $url;
 
     /**
      * Redirect constructor.
@@ -82,13 +83,14 @@ class Redirect implements HttpPostActionInterface, HttpGetActionInterface
 
         try {
             $order = $this->checkoutSession->getLastRealOrder();
-            if (!$order) {
+
+            if (!$order->getId()) {
                 throw new LocalizedException(__('Cannot get order information from session'));
             }
 
             $payment = $order->getPayment();
-            if (!$payment) {
-                throw new LocalizedException(__('Cannot get payment information from session'));
+            if (!$payment->getEntityId()) {
+                throw new LocalizedException(__('Cannot get payment information from session.'));
             }
 
             $paymentInformation = $payment->getAdditionalInformation();
@@ -97,11 +99,13 @@ class Redirect implements HttpPostActionInterface, HttpGetActionInterface
                 !isset($paymentInformation[Config::KEY_TOKEN])
                 || $paymentInformation[Config::KEY_TOKEN] == null
             ) {
-                throw new LocalizedException(__('Error getting token information from session'));
+                throw new LocalizedException(__('Error getting token information from session.'));
             }
 
             $order->addCommentToStatusHistory(
-                __('Successfully created Payment Token. customer is Redirected to the payment interface'),
+                __(
+                    'Successfully created Payment Token. customer is Redirected to the payment interface'
+                )->render(),
                 Order::STATE_PENDING_PAYMENT
             );
 

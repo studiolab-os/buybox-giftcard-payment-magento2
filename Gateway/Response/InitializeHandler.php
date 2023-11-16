@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -21,14 +22,13 @@ use BuyBox\Payment\Model\RestClient;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Magento\Sales\Model\Order\Payment;
 
 class InitializeHandler implements HandlerInterface
 {
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     public function __construct(Config $config)
     {
@@ -44,7 +44,6 @@ class InitializeHandler implements HandlerInterface
     {
         $paymentDO = SubjectReader::readPayment($handlingSubject);
 
-        /** @var $payment Payment */
         $payment = $paymentDO->getPayment();
         $order = $payment->getOrder();
         $order->setCanSendNewEmailFlag(false);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BuyBox Gift Card payment module for Magento.
  *
@@ -93,17 +94,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @var UrlInterface
      */
-    private $url;
+    private UrlInterface $url;
 
     /**
      * @var string
      */
-    private $pathPattern;
+    private string $pathPattern;
 
     /**
      * @var string|null
      */
-    private $methodCode;
+    private ?string $methodCode;
 
     /**
      * Config constructor.
@@ -149,25 +150,18 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getIsActive($storeId = null): bool
     {
-        return (bool) (int) $this->get(self::KEY_IS_ACTIVE, '', $storeId);
+        return (bool) (int) $this->get(self::KEY_IS_ACTIVE, $storeId);
     }
 
     /**
      * @param      $field
-     * @param null $default
      * @param null $storeId
      *
      * @return mixed|null
      */
-    public function get($field, $default = null, $storeId = null)
+    public function get($field, $storeId = null)
     {
-        $value = parent::getValue($field, $storeId);
-
-        if ($value === null) {
-            $value = $default;
-        }
-
-        return $value;
+        return parent::getValue($field, $storeId);
     }
 
     /**
@@ -177,7 +171,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getDebug($storeId = null): bool
     {
-        return (bool) (int) $this->get(self::KEY_DEBUG, '', $storeId);
+        return (bool) (int) $this->get(self::KEY_DEBUG, $storeId);
     }
 
     /**
@@ -187,67 +181,73 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getSortOrder($storeId = null): int
     {
-        return (int) $this->get(self::KEY_SORT_ORDER, '', $storeId);
+        return (int) $this->get(self::KEY_SORT_ORDER, $storeId);
     }
 
     /**
      * Get Api Username.
      *
-     * @param $storeId
+     * @param null $storeId
+     * @return string
      */
     public function getApiUsername($storeId = null): string
     {
-        return (string) $this->get(self::KEY_API_USERNAME, '', $storeId);
+        return (string) $this->get(self::KEY_API_USERNAME, $storeId);
     }
 
     /**
      * Get Api Password.
      *
-     * @param $storeId
+     * @param null $storeId
+     * @return string
      */
     public function getApiPassword($storeId = null): string
     {
-        return (string) $this->get(self::KEY_API_PASSWORD, '', $storeId);
+        return (string) $this->get(self::KEY_API_PASSWORD, $storeId);
     }
 
     /**
      * Get Api Signature.
      *
-     * @param $storeId
+     * @param null $storeId
+     * @return string
      */
     public function getApiSignature($storeId = null): string
     {
-        return (string) $this->get(self::KEY_API_SIGNATURE, '', $storeId);
+        return (string) $this->get(self::KEY_API_SIGNATURE, $storeId);
     }
 
     /**
-     * Get Service Domaine.
+     * Get Service Domain.
      *
-     * @param $storeId
+     * @param null $storeId
+     * @return string
      */
     public function getServiceDomain($storeId = null): string
     {
-        return (string) $this->get(self::KEY_SERVICE_DOMAIN, '', $storeId);
+        return (string) $this->get(self::KEY_SERVICE_DOMAIN, $storeId);
     }
 
     /**
      * Get Order Status.
      *
-     * @param $storeId
+     * @param null $storeId
+     * @return string
      */
     public function getOrderStatus($storeId = null): string
     {
-        return (string) $this->get(self::KEY_ORDER_STATUS, '', $storeId);
+        return (string) $this->get(self::KEY_ORDER_STATUS, $storeId);
     }
 
     /**
      * Get Payment Action.
      *
-     * @param $storeId
+     * @param null $storeId
+     * @return string
      */
     public function getPaymentAction($storeId = null): string
     {
-        return (string) $this->get(self::KEY_PAYMENT_ACTION, '', $storeId);
+        return (string) $this->get(self::KEY_PAYMENT_ACTION, $storeId);
     }
 
     /**
@@ -274,11 +274,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get Environment.
      *
-     * @param $storeId
+     * @param null $storeId
+     * @return string
      */
     public function getEnvironment($storeId = null): string
     {
-        return (string) $this->get(self::KEY_ENVIRONMENT, '', $storeId);
+        return (string) $this->get(self::KEY_ENVIRONMENT, $storeId);
     }
 
     public function getAuthenticationParams(): array
