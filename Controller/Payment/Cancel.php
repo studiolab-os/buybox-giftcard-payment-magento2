@@ -93,7 +93,7 @@ class Cancel implements HttpPostActionInterface, HttpGetActionInterface
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
-        $this->messageManager->addNoticeMessage('You canceled the payment.');
+        $this->messageManager->addNoticeMessage(__('You canceled the payment.'));
 
         return $redirect->setPath('checkout/cart');
     }
