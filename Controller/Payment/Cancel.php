@@ -28,6 +28,9 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
 class Cancel implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
@@ -65,9 +68,6 @@ class Cancel implements HttpPostActionInterface, HttpGetActionInterface
         $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
-    /**
-     * Execute.
-     */
     public function execute(): ResultInterface
     {
         $redirect = $this->resultRedirectFactory->create();
@@ -93,7 +93,7 @@ class Cancel implements HttpPostActionInterface, HttpGetActionInterface
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
-        $this->messageManager->addNoticeMessage('You canceled the payment.');
+        $this->messageManager->addNoticeMessage(__('You canceled the payment.'));
 
         return $redirect->setPath('checkout/cart');
     }
