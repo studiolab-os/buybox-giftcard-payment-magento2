@@ -79,7 +79,7 @@ and to configure `Payment Method Facade` (used by `Sales` and `Checkout` modules
 
 ## Contributors
 
-[Studiolab](https://studiolab.fr)
+[studiolab-os](https://studiolab.fr) <developer@studiolab.fr>
 
 ## License
 
