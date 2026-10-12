@@ -7,15 +7,16 @@ BuyBox Gift Card payment gateway integration module for Magento 2.
 
 ### ⚠️ Magento versions compatibility :
 
+> **Current version:** BuyBox Payment **2.4.7.0**, compatible with Magento **2.4.7 and later** and PHP **8.3 and later**.
+>
+> Magento 2.0.x to 2.4.6.x and their corresponding BuyBox Payment versions are no longer maintained.
+
 **Which version should I use ?**
 
 | Magento Version                                              | BuyBox Payment Version   | Install                                                        |
 |--------------------------------------------------------------|--------------------------|----------------------------------------------------------------|
-| Magento **2.4.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.4.x** | ```composer require buybox/giftcard-payment-magento2 ~2.4.0``` |
-| Magento **2.3.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.3.x** | ```composer require buybox/giftcard-payment-magento2 ~2.3.0``` |
-| Magento **2.2.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.2.x** | ```composer require buybox/giftcard-payment-magento2 ~2.2.0``` |
-| Magento **2.1.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.1.x** | ```composer require buybox/giftcard-payment-magento2 ~2.1.0``` |
-| Magento **2.0.x** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.0.x** | ```composer require buybox/giftcard-payment-magento2 ~2.0.0``` |
+| Magento **2.4.7+** Opensource (CE) && Enterprise Edition (EE) | BuyBox Payment **2.4.7.0** | ```composer require buybox/giftcard-payment-magento2 ^2.4.7``` |
+| Magento **2.4.6 and earlier** | Earlier versions | **Not maintained** |
 
 
 

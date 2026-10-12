@@ -100,9 +100,14 @@ class RestClient
 
         try {
             $result = $this->curl->read();
-            $result = preg_split('/^\r?$/m', $result, 2);
-            $result = trim($result[1]);
-            parse_str($result, $response);
+            $parts = preg_split('/^\r?$/m', $result, 2);
+
+            if (!isset($parts[1])) {
+                throw new LocalizedException(__('Invalid response from payment API.'));
+            }
+
+            $responseBody = trim($parts[1]);
+            parse_str($responseBody, $response);
             $this->paymentLogger->debug(['buybox_response' => $response], [], $this->config->getDebug());
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), (array) $e);
