@@ -100,6 +100,7 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
     {
         $redirect = $this->resultRedirectFactory->create();
         $params = $this->request->getParams();
+        $order = null;
 
         try {
             $order = $this->checkoutSession->getLastRealOrder();
@@ -115,7 +116,6 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
             }
 
             if (!$this->validateParams($payment, $params)) {
-                $this->restoreQuote($order);
                 throw new LocalizedException(__('Error getting token information from session.'));
             }
 
@@ -132,6 +132,12 @@ class ReturnAction implements HttpPostActionInterface, HttpGetActionInterface
 
             return $redirect->setPath('checkout/onepage/success/');
         } catch (Exception $e) {
+            if ($order && $order->getId() && !$order->isCanceled()) {
+                $order->cancel();
+                $this->orderRepository->save($order);
+                $this->checkoutSession->restoreQuote();
+            }
+
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 

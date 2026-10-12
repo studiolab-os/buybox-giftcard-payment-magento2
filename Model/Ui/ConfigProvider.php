@@ -19,9 +19,8 @@ namespace BuyBox\Payment\Model\Ui;
 
 use BuyBox\Payment\Gateway\Config\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Framework\UrlInterface;
 
-final class ConfigProvider implements ConfigProviderInterface
+class ConfigProvider implements ConfigProviderInterface
 {
     public const KEY_REDIRECT_URL = 'redirect_url';
     public const KEY_CODE = 'code';
